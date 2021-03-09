@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icono copia.png</file>
+        <file>excelico copia.png</file>
+        <file>Error.png</file>
+        <file>icono.ico</file>
+    </qresource>
+</RCC>
