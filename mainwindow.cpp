@@ -78,6 +78,11 @@ void MainWindow::abrir_y_acTG()
 
                 double diff_dia, t;
                 QDate fecha_hoy = QDate().currentDate();
+                if (fecha_mens.daysTo(fecha_hoy) < 0){
+                    TG[fila-4] = -3;    //fecha posterior a la fecha de hoy
+                    fila++;
+                    continue;
+                }
                 int dias = static_cast<int>(fecha_mens.daysTo(fecha_hoy));
 
                 diff_dia = (dias % 7) * 0.1;
@@ -91,7 +96,7 @@ void MainWindow::abrir_y_acTG()
                     TG[fila-4] = restg;      //sumo el dia * 0.1
             }
             //----------tomar el resultado obtenido y dejar un solo lugar decimal------
-            TG[fila-4] = QString::number(TG[fila-4],'g',3).toFloat();
+            TG[fila-4] = QString::number(TG[fila-4],'g',3).toDouble();
 
             //-----------------imprimir---en---pantalla--------------------------------
             /*qDebug () << "B4   "<< nombre
@@ -101,7 +106,7 @@ void MainWindow::abrir_y_acTG()
             //----------escribir---en ---archivo--------------------------------------
 
             fila++;
-        }
+        }   //--del while
         cant = fila;
     }
     //escribir para salvar
@@ -111,8 +116,8 @@ void MainWindow::abrir_y_acTG()
     QXlsx::Document xlsx(nombreArch);
     for (int fila = 4; fila < cant; ++fila)
         xlsx.write("E"+ QString::number(fila),
-                   (TG[fila-4]>-1)? QVariant(QString::number(TG[fila-4])):
-            (TG[fila-4]==-1)?"Parió":"No fecha menstr.");
+                   (TG[fila-4]>-1)? QVariant(TG[fila-4]):
+            (TG[fila-4]==-1)?"Parió":(TG[fila-4]==-3)?"f.posterior":"No fecha menstr.");
     //salvar
     //qDebug () << "salvando ...... espere ";
     bool hay_Error= xlsx.save();
