@@ -9,14 +9,19 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    setMinimumSize(540,480);
-    setMaximumSize(640,480);
+    setMinimumSize(660,480);
+    setMaximumSize(660,480);
+
+    mSystemTrayIcon = new QSystemTrayIcon(this);
+    mSystemTrayIcon->setIcon(QIcon(":/icono copia.png"));
+    mSystemTrayIcon->setVisible(1);
 
     ui->setupUi(this);
 }
 
 MainWindow::~MainWindow()
 {
+    delete mSystemTrayIcon;
     delete ui;
 }
 
@@ -46,6 +51,9 @@ void MainWindow::abrir_y_acTG()
         ui->texto->setText("");
         return;
     }
+    ui->pushButton->setEnabled(0);
+    ui->pushButton_2->setEnabled(0);
+
     double TG[500]; int cant = 0;
     //inicializacion de TG
     for (int i=0; i<500; ++i)
@@ -118,14 +126,19 @@ void MainWindow::abrir_y_acTG()
         xlsx.write("E"+ QString::number(fila),
                    (TG[fila-4]>-1)? QVariant(TG[fila-4]):
             (TG[fila-4]==-1)?"Parió":(TG[fila-4]==-3)?"f.posterior":"No fecha menstr.");
+
     //salvar
-    //qDebug () << "salvando ...... espere ";
-    bool hay_Error= xlsx.save();
+    bool hay_Error= xlsx.saveAs(nombreArch);
     if (hay_Error) {
         ui->s_error->setText("<p><span style=\" color:#ff0000;\">Error:  No se pudo salvar plenamente el archivo.<br/>Pero no se pierde ninguna informacion relevante<br/> Desagrupe hojas, ponga filtros a sus datos<br/>e inmovilice sus vistas de nuevo.</span></p>");
-        //qDebug () << s_error();
-    }
-    //qDebug () << "Finalizado  .... ";
-    ui->texto->setText("<b>Finalizado<b>");
 
+    }
+    ui->texto->setText("<b>Finalizado<b>");
+    mSystemTrayIcon->showMessage("Mensaje de Pami AcTG","Proceso Finalizado exitosamente.");
+    mSystemTrayIcon->show();
+}
+
+bool MainWindow::falta_encabezado_en_xlsx(const QXlsx::Worksheet &wSERIE, QString &s) const
+{
+    return 1;
 }
