@@ -28,7 +28,9 @@ private:
     Ui::MainWindow *ui;
 
     QSystemTrayIcon *mSystemTrayIcon;
-    void abrir_y_acTG() ;
+    inline bool abrir_y_acTG() ;
+    void reparar_formulas_finales(QXlsx::Worksheet &wsSERIE);
+
     bool falta_encabezado_en_xlsx(
             const
             QXlsx::Worksheet &wSERIE //hoja SERIE del excel

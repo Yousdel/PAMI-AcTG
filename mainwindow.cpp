@@ -33,26 +33,35 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    ui->texto->setText("<b> Abriendo ....\n </b>");
-    abrir_y_acTG();
-    if (ui->autoSalir->isChecked())
-        on_pushButton_clicked();
+    ui->texto->setText("<b> Abriendo y analizando ....\n </b>");
+
+    ui->pushButton->setEnabled(0);
+    ui->pushButton_2->setEnabled(0);
+
+    bool res = abrir_y_acTG();
+
+    ui->pushButton->setEnabled(1);
+    ui->pushButton_2->setEnabled(1);
+
+    if (res) {
+        mSystemTrayIcon->showMessage("Mensaje de Pami AcTG","Proceso Finalizado exitosamente.");
+        mSystemTrayIcon->show();
+
+        if (ui->autoSalir->isChecked())
+            on_pushButton_clicked();
+    }
 }
 
-void MainWindow::abrir_y_acTG()
-{    
-    //qDebug() << " abriendo E:\\MILLO\\BASE DE DATOS EMBARAZADAS.xlsx ....\n";
-
+bool MainWindow::abrir_y_acTG()
+{
     QString nombreArch = QFileDialog::getOpenFileName(this, tr("Abrir archivo"),
                                                       "/home",
                                                       tr("Archivos de Excel (*.xlsx *.xls)"));
 
     if (nombreArch==""){
         ui->texto->setText("");
-        return;
+        return 0;
     }
-    ui->pushButton->setEnabled(0);
-    ui->pushButton_2->setEnabled(0);
 
     double TG[500]; int cant = 0;
     //inicializacion de TG
@@ -106,13 +115,6 @@ void MainWindow::abrir_y_acTG()
             //----------tomar el resultado obtenido y dejar un solo lugar decimal------
             TG[fila-4] = QString::number(TG[fila-4],'g',3).toDouble();
 
-            //-----------------imprimir---en---pantalla--------------------------------
-            /*qDebug () << "B4   "<< nombre
-                          << "  fecha ult menstr >s es "<< s << " : s2 es "<<s2 <<
-                             "fecha QDATE es "<< fecha_mens
-                          << " TG ------> " << TG[fila-4];*/
-            //----------escribir---en ---archivo--------------------------------------
-
             fila++;
         }   //--del while
         cant = fila;
@@ -134,11 +136,16 @@ void MainWindow::abrir_y_acTG()
 
     }
     ui->texto->setText("<b>Finalizado<b>");
-    mSystemTrayIcon->showMessage("Mensaje de Pami AcTG","Proceso Finalizado exitosamente.");
-    mSystemTrayIcon->show();
+    return 1;
+}
+
+void MainWindow::reparar_formulas_finales(QXlsx::Worksheet &wsSERIE)
+{
+    (void) wsSERIE; //temporal
 }
 
 bool MainWindow::falta_encabezado_en_xlsx(const QXlsx::Worksheet &wSERIE, QString &s) const
 {
+    (void) wSERIE; //temporal
     return 1;
 }
