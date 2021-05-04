@@ -37,10 +37,4 @@ RESOURCES += \
 
 RC_ICONS = icono.ico
 
-
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/build-Operaciones_con_QStrings-Desktop_Qt_5_14_1_MinGW_64_bit-Release/ -lOperaciones_con_QStrings
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/build-Operaciones_con_QStrings-Desktop_Qt_5_14_1_MinGW_64_bit-Release/ -lOperaciones_con_QStringsd
-else:unix: LIBS += -L$$PWD/build-Operaciones_con_QStrings-Desktop_Qt_5_14_1_MinGW_64_bit-Release/ -lOperaciones_con_QStrings
-
-INCLUDEPATH += $$PWD/Operaciones_con_QStrings-main
-DEPENDPATH += $$PWD/Operaciones_con_QStrings-main
+//recordar incluir la dll operaciones con qstrings
