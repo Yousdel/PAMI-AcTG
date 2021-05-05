@@ -37,4 +37,4 @@ RESOURCES += \
 
 RC_ICONS = icono.ico
 
-//recordar incluir la dll operaciones con qstrings
+# recordar incluir la dll operaciones con qstrings
